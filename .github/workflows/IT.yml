@@ -1,0 +1,43 @@
+name: Functional Test
+
+on: [push, pull_request]
+
+jobs:
+  test: 
+    name: Functional test on Kibana 7.9.0 on node 10.21.0
+
+    runs-on: ubuntu-latest
+           
+    steps:
+    - uses: actions/checkout@v2
+      
+    - name: Set up node 10.21.0
+      uses: actions/setup-node@v1
+      with:
+        node-version: '10.21.0'
+        registry-url: 'https://registry.npmjs.org'
+    
+    - name: install ElasticSearch
+      run: wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-oss-7.9.0-linux-x86_64.tar.gz
+      
+    - name: unzip
+      run: gzip -d elasticsearch-oss-7.9.0-linux-x86_64.tar.gz 
+        
+    - run: tar -xvf elasticsearch-oss-7.9.0-linux-x86_64.tar
+      
+    - run: rm -rf elasticsearch-oss-7.9.0-linux-x86_64.tar
+      
+    - run: mv elasticsearch-7.9.0 ../
+      
+    - name: install dependencies 
+      run: yarn kbn bootstrap
+      
+    - run: yarn add chromedriver
+    
+    - name: run build
+      run: yarn build --oss --skip-os-packages
+      
+    - name: Run Test
+      run: TEST_ES_FROM=/home/runner/work/kibana-oss/elasticsearch-7.9.0 yarn test
+      env:
+           TEST_BROWSER_HEADLESS: 1
