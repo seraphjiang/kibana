@@ -38,6 +38,7 @@ ES_5_0.prototype = _.create(Api.prototype, { 'constructor': ES_5_0 });
       var url_params_def = {};
       _.each(description.patterns || [], function (p) {
         if (p.indexOf("{indices}") >= 0) {
+          console.log(p);
           url_params_def["ignore_unavailable"] = "__flag__";
           url_params_def["allow_no_indices"] = "__flag__";
           url_params_def["expand_wildcards"] = ["open", "closed"];

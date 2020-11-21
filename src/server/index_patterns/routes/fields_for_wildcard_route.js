@@ -17,7 +17,7 @@ export const createFieldsForWildcardRoute = pre => ({
         pattern,
         meta_fields: metaFields,
       } = req.query;
-
+      console.log('test ...', indexPatterns);
       reply(
         indexPatterns.getFieldsForWildcard({
           pattern,

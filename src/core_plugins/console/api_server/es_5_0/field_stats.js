@@ -8,9 +8,9 @@ module.exports = function (api) {
     url_params: {
       fields: [],
       level: ["cluster", "indices"],
-      ignore_unavailable: ["true", "false"],
-      allow_no_indices: [false, true],
-      expand_wildcards: ["open", "closed", "none", "all"]
+      // ignore_unavailable: ["true", "false"],
+      // allow_no_indices: [false, true],
+      // expand_wildcards: ["open", "closed", "none", "all"]
     },
     data_autocomplete_rules: {
       fields: [

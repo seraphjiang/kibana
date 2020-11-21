@@ -6,7 +6,8 @@
 import { forEach, get } from 'lodash';
 import isEsCompatibleWithKibana from './is_es_compatible_with_kibana';
 import SetupError from './setup_error';
-
+global.g_nodes = [];
+global.g_ver = '';
 /**
  * tracks the node descriptions that get logged in warnings so
  * that we don't spam the log with the same message over and over.
@@ -36,9 +37,11 @@ export function ensureEsVersion(server, kibanaVersion) {
     const warningNodes = [];
 
     forEach(info.nodes, esNode => {
+      g_nodes.push(esNode);
+      g_ver=esNode.version;
       if (!isEsCompatibleWithKibana(esNode.version, kibanaVersion)) {
         // Exit early to avoid collecting ES nodes with newer major versions in the `warningNodes`.
-        return incompatibleNodes.push(esNode);
+        // return incompatibleNodes.push(esNode);
       }
 
       // It's acceptable if ES and Kibana versions are not the same so long as
@@ -87,8 +90,8 @@ export function ensureEsVersion(server, kibanaVersion) {
         `This version of Kibana requires Elasticsearch v` +
         `${kibanaVersion} on all nodes. I found ` +
         `the following incompatible nodes in your cluster: ${incompatibleNodeNames.join(', ')}`;
-
-      throw new SetupError(server, errorMessage);
+      server.log(['plugin', 'warning'], errorMessage);
+      // throw new SetupError(server, errorMessage);
     }
 
     return true;

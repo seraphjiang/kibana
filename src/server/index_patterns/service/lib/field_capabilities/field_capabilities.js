@@ -19,6 +19,7 @@ export const concatIfUniq = (arr, value) => (
  */
 export async function getFieldCapabilities(callCluster, indices = [], metaFields = []) {
   const esFieldCaps = await callFieldCapsApi(callCluster, indices);
+  console.log(esFieldCaps);
   const fieldsFromFieldCapsByName = indexBy(readFieldCapsResponse(esFieldCaps), 'name');
 
   const allFieldsUnsorted = Object
